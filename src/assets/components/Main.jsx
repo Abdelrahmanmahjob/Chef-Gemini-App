@@ -6,6 +6,13 @@ import { getRecipeFromGemini } from "../../ai"
 export default function Main() {
     const [ingredients, setIngredients] = React.useState([])
     const [recipe, setRecipe] = React.useState("")
+    const recipeSectionRef = React.useRef(null)
+    // console.log(recipeSectionRef)
+    React.useEffect(() => {
+        if(recipe && recipeSectionRef.current != null) {
+            recipeSectionRef.current.scrollIntoView({ behavior: "smooth" })
+        }
+    }, [recipe])
 
     async function getRecipe() {
         const recipeMarkdown = await getRecipeFromGemini(ingredients)
@@ -39,6 +46,7 @@ export default function Main() {
 
             {ingredients.length > 0 ?
                 <IngredientsList
+                    ref={recipeSectionRef}
                     ingredients={ingredients}
                     removeIngredient={removeIngredient}
                     getRecipe={getRecipe}
